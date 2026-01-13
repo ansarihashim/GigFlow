@@ -3,7 +3,10 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
 import { env } from './config/env.js';
-import { authRouter } from './routes/auth.js';
+import { sanitizeError } from './utils/errors.js';
+import { authRouter } from './routes/auth.routes.js';
+import { gigRouter } from './routes/gig.routes.js';
+import { bidRouter } from './routes/bid.routes.js';
 
 export function createApp() {
   const app = express();
@@ -19,17 +22,23 @@ export function createApp() {
   app.use(cookieParser());
 
   app.get('/health', (_req, res) => {
-    res.json({ ok: true });
+    res.json({ success: true, data: { status: 'ok' } });
   });
 
   app.use('/api/auth', authRouter);
+  app.use('/api/gigs', gigRouter);
+  app.use('/api/bids', bidRouter);
 
-  // Basic error handler
+  // 404 handler for unknown routes
+  app.use((_req, res) => {
+    res.status(404).json({ success: false, error: 'Route not found' });
+  });
+
+  // Centralized error handler
   // eslint-disable-next-line no-unused-vars
   app.use((err, _req, res, _next) => {
-    const status = err.statusCode ?? 500;
-    const message = env.nodeEnv === 'production' ? 'Server error' : err.message;
-    res.status(status).json({ error: message });
+    const { status, message } = sanitizeError(err, env.nodeEnv === 'production');
+    res.status(status).json({ success: false, error: message });
   });
 
   return app;
