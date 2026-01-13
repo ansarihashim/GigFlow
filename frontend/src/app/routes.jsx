@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from '../pages/auth/Login.jsx';
 import Register from '../pages/auth/Register.jsx';
 import GigList from '../pages/gigs/GigList.jsx';
+import GigDetails from '../pages/gigs/GigDetails.jsx';
 import { useAuthStore } from '../store/AuthProvider.jsx';
 
 function ProtectedRoute({ children }) {
@@ -22,6 +23,14 @@ export default function AppRoutes() {
         element={(
           <ProtectedRoute>
             <GigList />
+          </ProtectedRoute>
+        )}
+      />
+      <Route
+        path="/gigs/:id"
+        element={(
+          <ProtectedRoute>
+            <GigDetails />
           </ProtectedRoute>
         )}
       />
