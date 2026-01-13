@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { register, login, logout, getMe } from '../controllers/auth.controller.js';
-import { protect } from '../middleware/auth.middleware.js';
+import { register, login } from '../controllers/auth.controller.js';
 
 export const authRouter = Router();
 
@@ -9,9 +8,3 @@ authRouter.post('/register', register);
 
 // POST /api/auth/login
 authRouter.post('/login', login);
-
-// POST /api/auth/logout
-authRouter.post('/logout', logout);
-
-// GET /api/auth/me (protected)
-authRouter.get('/me', protect, getMe);

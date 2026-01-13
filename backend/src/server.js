@@ -16,6 +16,15 @@ async function main() {
   initializeSocket(server);
   console.log('Socket.io initialized');
 
+  // Graceful error handling for port conflicts
+  server.on('error', (e) => {
+    if (e.code === 'EADDRINUSE') {
+      console.error(`Port ${env.port} already in use. Stop the existing process or change the port.`);
+      process.exit(1);
+    }
+    console.error('Server error:', e);
+  });
+
   server.listen(env.port, () => {
     console.log(`Server listening on port ${env.port}`);
   });

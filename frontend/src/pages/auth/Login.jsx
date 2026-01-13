@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../../services/auth.api.js';
-import { useAuthStore } from '../../store/AuthProvider.jsx';
+import { useAuth } from '../../store/AuthProvider.jsx';
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setLoginSuccess, setAuthFailure, setLoading, loading, error } = useAuthStore();
+  const { setLoginSuccess, setAuthFailure, setLoading, loading, error } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

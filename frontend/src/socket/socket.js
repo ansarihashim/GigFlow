@@ -1,13 +1,37 @@
-// Socket.io client will be initialized here
+import { io } from 'socket.io-client';
+
 let socket = null;
 
-export function getSocket() {
+const SOCKET_URL = 'http://localhost:5000';
+
+export function connectSocket() {
+  if (!socket) {
+    socket = io(SOCKET_URL, {
+      transports: ['websocket'],
+      autoConnect: true,
+      reconnection: true,
+      withCredentials: true, // Important for cookies
+    });
+
+    socket.on('connect', () => {
+      console.log('Socket connected:', socket.id);
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Socket disconnected');
+    });
+  }
   return socket;
 }
 
-export function initSocket() {
-  // Socket initialization will be implemented
-  return socket;
+export function onHired(callback) {
+  if (!socket) return;
+  socket.on('hired', callback);
+
+  // Return cleanup function
+  return () => {
+    socket.off('hired', callback);
+  };
 }
 
 export function disconnectSocket() {
@@ -17,4 +41,4 @@ export function disconnectSocket() {
   }
 }
 
-export default { getSocket, initSocket, disconnectSocket };
+export default { connectSocket, onHired, disconnectSocket };

@@ -3,10 +3,11 @@ import Login from '../pages/auth/Login.jsx';
 import Register from '../pages/auth/Register.jsx';
 import GigList from '../pages/gigs/GigList.jsx';
 import GigDetails from '../pages/gigs/GigDetails.jsx';
-import { useAuthStore } from '../store/AuthProvider.jsx';
+import GigBids from '../pages/bids/GigBids.jsx';
+import { useAuth } from '../store/AuthProvider.jsx';
 
 function ProtectedRoute({ children }) {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated } = useAuth();
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
@@ -31,6 +32,14 @@ export default function AppRoutes() {
         element={(
           <ProtectedRoute>
             <GigDetails />
+          </ProtectedRoute>
+        )}
+      />
+      <Route
+        path="/gigs/:id/bids"
+        element={(
+          <ProtectedRoute>
+            <GigBids />
           </ProtectedRoute>
         )}
       />

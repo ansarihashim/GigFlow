@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { User } from '../models/User.model.js';
-import { generateToken, setTokenCookie, clearTokenCookie } from '../utils/jwt.js';
+import { generateToken, setTokenCookie } from '../utils/jwt.js';
 
 /**
  * @desc    Register a new user
@@ -93,30 +93,4 @@ export async function login(req, res, next) {
   } catch (error) {
     return next(error);
   }
-}
-
-/**
- * @desc    Logout user (clear cookie)
- * @route   POST /api/auth/logout
- * @access  Public
- */
-export async function logout(req, res) {
-  clearTokenCookie(res);
-  return res.json({ success: true, message: 'Logged out successfully' });
-}
-
-/**
- * @desc    Get current user profile
- * @route   GET /api/auth/me
- * @access  Private
- */
-export async function getMe(req, res) {
-  return res.json({
-    success: true,
-    data: {
-      id: req.user._id,
-      name: req.user.name,
-      email: req.user.email
-    }
-  });
 }
